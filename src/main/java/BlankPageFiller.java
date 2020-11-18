@@ -8,23 +8,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class BlankPageFiller {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("C:\\Users\\lukas\\OneDrive - stud.h-da.de\\Master"));
-        // Dialog zum Oeffnen von Dateien anzeigen
 
         int rueckgabeWert = chooser.showOpenDialog(null);
 
-        /* Abfrage, ob auf "Öffnen" geklickt wurde */
         if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
             String filename = chooser.getSelectedFile().getName();
             String fileExtension = filename.substring(filename.lastIndexOf("."), filename.length());
-
+            String newFileName = chooser.getSelectedFile().getParentFile().getAbsolutePath() + "\\Notizen_" + chooser.getSelectedFile().getName();
+            System.out.println(newFileName);
             if (fileExtension.equals(".pdf")) {
                 PdfReader inputPdfReader = null;
                 try {
                     inputPdfReader = new PdfReader(chooser.getSelectedFile().getAbsolutePath());
-                    PdfStamper stamper = new PdfStamper(inputPdfReader, new FileOutputStream(chooser.getSelectedFile().getAbsolutePath() + "Test.pdf"));
+                    PdfStamper stamper = new PdfStamper(inputPdfReader, new FileOutputStream(newFileName));
                     for (int i = 2; i <= inputPdfReader.getNumberOfPages() + 1; i=i+2){
                         stamper.insertPage(i, inputPdfReader.getPageSizeWithRotation(1));
                         System.out.println("Inserted Page at: "+ i);
